@@ -1,47 +1,53 @@
-import React, { Component } from 'react';
 import css from './App.module.css';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Modal } from 'components/Modal/Modal';
+import { useState } from 'react';
 
-export class App extends Component {
-  state = {
-    imageTags: '',
-    showModal: false,
+export const App = () => {
+  // state = {
+  //   imageTags: '',
+  //   showModal: false,
+  // };
+
+  const [imageTags, setImageTags] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [bigImage, setBigImage] = useState({});
+
+  const handleFormSubmit = imageTags => {
+    // this.setState({ imageTags });
+    setImageTags(imageTags);
+    console.log('imageTags', imageTags);
   };
 
-  handleFormSubmit = imageTags => {
-    this.setState({ imageTags });
-    console.log(imageTags);
+  const openModal = (bigPhoto, tags) => {
+    // this.setState({ showModal: true, bigImage: { bigPhoto, tags } });
+    setShowModal(true);
+    setBigImage({ bigPhoto, tags });
+    console.log('open modal', showModal);
   };
 
-  openModal = (bigPhoto, tags) => {
-    this.setState({ showModal: true, bigImage: { bigPhoto, tags } });
-    console.log('open modal', this.state.showModal);
+  const closeModal = () => {
+    // this.setState({ showModal: false });
+    setShowModal(false);
+    console.log('close modal', showModal);
   };
 
-  closeModal = () => {
-    this.setState({ showModal: false });
-    console.log('close modal', this.state.showModal);
-  };
-
-  render() {
-    const { imageTags, bigImage, showModal } = this.state;
-    return (
-      <div className={css.App}>
-        <Searchbar onPropSubmit={this.handleFormSubmit} />
-        <ImageGallery imageTags={imageTags} openModal={this.openModal} />
-        {showModal && (
-          <Modal onClose={this.closeModal}>
-            <img
-              width="1400"
-              height="900"
-              src={bigImage.bigPhoto}
-              alt={bigImage.tags}
-            />
-          </Modal>
-        )}
-      </div>
-    );
-  }
-}
+  // const { imageTags, bigImage, showModal } = this.state;
+  return (
+    <div className={css.App}>
+      <Searchbar onPropSubmit={handleFormSubmit} />
+      <ImageGallery imageTags={imageTags} openModal={openModal} />
+      {showModal && (
+        <Modal onClose={closeModal}>
+          <img
+            width="1400"
+            height="900"
+            src={bigImage.bigPhoto}
+            alt={bigImage.tags}
+          />
+        </Modal>
+      )}
+    </div>
+  );
+};
