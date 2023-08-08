@@ -13,26 +13,55 @@ export const ImageGallery = ({ imageTags, openModal }) => {
   //   status: 'idle',
   //   page: 1,
   // };
-  const [images, setImages] = useState(null);
+  const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
   const [page, setPage] = useState(1);
+  const [totalHits, setTotalHits] = useState(0);
 
   useEffect(() => {
     setStatus('pending');
     apiImages(imageTags, page)
-      .then(images => setImages(images.hits))
-      .then(setStatus('resolved'))
-      .catch(error => setError(error), setStatus('rejected'));
-  }, [imageTags]);
+      .then(photos => {
+        if (imageTags === '') {
+          setStatus('idle');
+          return;
+        }
+        if (page === 1) {
+          setImages(photos.hits);
+          setTotalHits(photos.totalHits);
+          console.log('images', images);
+          console.log('totalHits', totalHits);
+          console.log('images.length', images.length);
+          setStatus('resolved');
+          return;
+        }
+        if (page > 1) {
+          setImages(prevImages => [...prevImages, ...photos.hits]);
+          console.log('photos', photos);
+          setStatus('resolved');
+        }
+      })
 
-  useEffect(() => {
-    setStatus('pending');
-    apiImages(imageTags, page)
-      .then(images => setImages(prevImages => [...prevImages, ...images.hits]))
-      .then(setStatus('resolved'))
-      .catch(error => setError(error), setStatus('rejected'));
-  }, [page]);
+      .catch(error => {
+        setError(error.message);
+        setStatus('rejected');
+      });
+  }, [imageTags, page]);
+
+  // useEffect(() => {
+  //   setStatus('pending');
+  //   apiImages(imageTags, page)
+  //     .then(images => {
+  //       setImages(prevImages => [...prevImages, ...images.hits]);
+  //       setStatus('resolved');
+  //     })
+
+  //     .catch(error => {
+  //       setError(error.message);
+  //       setStatus('rejected');
+  //     });
+  // }, [page]);
 
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevProps.imageTags !== this.props.imageTags) {
@@ -68,25 +97,17 @@ export const ImageGallery = ({ imageTags, openModal }) => {
 
   // const { images, error, status } = this.state;
 
-  if (status === 'idle') {
-    return <h1 className={css.heading}>Enter what you're looking for</h1>;
-  }
+  return (
+    <>
+      {status === 'idle' && (
+        <h1 className={css.heading}>Enter what you're looking for</h1>
+      )}
+      {status === 'pending' && <Loader />}
+      {totalHits === 0 && (
+        <h1 className={css.heading}>Sorry, pictures are not found!</h1>
+      )}
 
-  if (status === 'pending') {
-    return <Loader />;
-  }
-
-  if (status === 'rejected') {
-    return <h1 className={css.heading}>{error}</h1>;
-  }
-
-  if (status === 'resolved') {
-    return (
-      <>
-        {images.length === 0 && (
-          <h1 className={css.heading}>Sorry, pictures are not found!</h1>
-        )}
-
+      {status === 'resolved' && (
         <ul className={css.ImageGallery}>
           {images.map(image => (
             <ImageGalleryItem
@@ -98,10 +119,11 @@ export const ImageGallery = ({ imageTags, openModal }) => {
             />
           ))}
         </ul>
-        {images.length > 0 && <Button onChangePage={handleBtnChangePage} />}
-      </>
-    );
-  }
+      )}
+      {images.length > 0 && <Button onChangePage={handleBtnChangePage} />}
+      {status === 'rejected' && <h1 className={css.heading}>{error}</h1>}
+    </>
+  );
 };
 
 ImageGallery.propTypes = {

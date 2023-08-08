@@ -12,7 +12,7 @@ export const Searchbar = ({ onPropSubmit }) => {
 
   const handleTagChange = evt => {
     // this.setState({ imageTags: evt.currentTarget.value.toLowerCase() });
-    setImageTags(evt.target.value.toLowerCase());
+    setImageTags(evt.currentTarget.value.toLowerCase());
   };
 
   const handleSubmit = evt => {
@@ -33,7 +33,7 @@ export const Searchbar = ({ onPropSubmit }) => {
         <button
           type="submit"
           className={css.SearchFormButton}
-          onClick={onPropSubmit}
+          // onClick={onPropSubmit}
         >
           <ImSearch style={{ width: 25, height: 25 }} />
           <span className={css.SearchFormButtonLabel}>Search</span>
