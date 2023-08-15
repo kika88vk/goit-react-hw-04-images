@@ -18,15 +18,12 @@ export function Modal({ onClose, children }) {
     if (evt.code === 'Escape') {
       onClose();
     }
-    console.log('close esc');
   };
 
   const handleClickOnOverlay = evt => {
     if (evt.target === evt.currentTarget) {
       onClose();
     }
-
-    console.log('close target');
     return;
   };
 
