@@ -11,18 +11,15 @@ export const App = () => {
 
   const handleFormSubmit = imageTags => {
     setImageTags(imageTags);
-    console.log('imageTags', imageTags);
   };
 
   const openModal = (bigPhoto, tags) => {
     setShowModal(true);
     setBigImage({ bigPhoto, tags });
-    console.log('open modal', showModal);
   };
 
   const closeModal = () => {
     setShowModal(false);
-    console.log('close modal', showModal);
   };
 
   return (
