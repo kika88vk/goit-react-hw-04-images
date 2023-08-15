@@ -7,13 +7,6 @@ import { useEffect } from 'react';
 const modalRoot = document.querySelector('#modal-root');
 
 export function Modal({ onClose, children }) {
-  // componentDidMount() {
-  //   window.addEventListener('keydown', this.handleKeyDown);
-  // }
-
-  // componentWillUnmount() {
-  //   window.removeEventListener('keydown', this.handleKeyDown);
-  // }
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {

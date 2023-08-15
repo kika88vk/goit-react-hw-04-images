@@ -4,14 +4,9 @@ import { ImSearch } from 'react-icons/im';
 import PropTypes from 'prop-types';
 
 export const Searchbar = ({ onPropSubmit }) => {
-  // state = {
-  //   imageTags: '',
-  // };
-
   const [imageTags, setImageTags] = useState('');
 
   const handleTagChange = evt => {
-    // this.setState({ imageTags: evt.currentTarget.value.toLowerCase() });
     setImageTags(evt.currentTarget.value.toLowerCase());
   };
 
@@ -22,19 +17,13 @@ export const Searchbar = ({ onPropSubmit }) => {
     }
     onPropSubmit(imageTags);
 
-    // this.setState({ imageTags: '' });
     setImageTags('');
   };
 
-  // const onSubmit = this.props.onSubmit;
   return (
     <header className={css.Searchbar}>
       <form className={css.SearchForm} onSubmit={handleSubmit}>
-        <button
-          type="submit"
-          className={css.SearchFormButton}
-          // onClick={onPropSubmit}
-        >
+        <button type="submit" className={css.SearchFormButton}>
           <ImSearch style={{ width: 25, height: 25 }} />
           <span className={css.SearchFormButtonLabel}>Search</span>
         </button>
