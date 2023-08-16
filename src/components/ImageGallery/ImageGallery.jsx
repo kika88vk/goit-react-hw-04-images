@@ -6,18 +6,18 @@ import { Button } from 'components/Button/Button';
 import { apiImages } from 'ApiImages/ApiImages';
 import PropTypes from 'prop-types';
 
-export const ImageGallery = ({ imageTags, openModal }) => {
+export const ImageGallery = ({ imageTags, openModal, pageFromApp }) => {
   const [images, setImages] = useState(null);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(pageFromApp);
   const [totalHits, setTotalHits] = useState(0);
 
-  useEffect(() => {
-    if (imageTags !== '' && page > 0) {
-      getImages();
-    }
+  // useEffect(() => {
+  //   setPage(pageFromApp);
+  // }, [pageFromApp]);
 
+  useEffect(() => {
     async function getImages() {
       try {
         setStatus('pending');
@@ -27,7 +27,7 @@ export const ImageGallery = ({ imageTags, openModal }) => {
           setStatus('resolved');
         } else {
           setImages(prevImages => [...prevImages, ...photos.hits]);
-          console.log('photos', photos);
+
           setStatus('resolved');
         }
 
@@ -37,6 +37,11 @@ export const ImageGallery = ({ imageTags, openModal }) => {
         setStatus('rejected');
       }
     }
+
+    if (imageTags !== '' && page > 0) {
+      getImages();
+    }
+    console.log('page', page);
   }, [imageTags, page]);
 
   const handleBtnChangePage = () => {
@@ -79,4 +84,5 @@ export const ImageGallery = ({ imageTags, openModal }) => {
 ImageGallery.propTypes = {
   imageTags: PropTypes.string,
   openModal: PropTypes.func,
+  pageFromApp: PropTypes.number,
 };

@@ -8,9 +8,11 @@ export const App = () => {
   const [imageTags, setImageTags] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [bigImage, setBigImage] = useState({});
+  const [page, setPage] = useState(1);
 
-  const handleFormSubmit = imageTags => {
+  const handleFormSubmit = (imageTags, page) => {
     setImageTags(imageTags);
+    setPage(page);
   };
 
   const openModal = (bigPhoto, tags) => {
@@ -25,7 +27,11 @@ export const App = () => {
   return (
     <div className={css.App}>
       <Searchbar onPropSubmit={handleFormSubmit} />
-      <ImageGallery imageTags={imageTags} openModal={openModal} />
+      <ImageGallery
+        imageTags={imageTags}
+        pageFromApp={page}
+        openModal={openModal}
+      />
       {showModal && (
         <Modal onClose={closeModal}>
           <img

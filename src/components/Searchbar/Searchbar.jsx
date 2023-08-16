@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 export const Searchbar = ({ onPropSubmit }) => {
   const [imageTags, setImageTags] = useState('');
+  const [page, setPage] = useState(1);
 
   const handleTagChange = evt => {
     setImageTags(evt.currentTarget.value.toLowerCase());
@@ -12,12 +13,12 @@ export const Searchbar = ({ onPropSubmit }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    if (imageTags.trim() === '') {
-      return;
-    }
-    onPropSubmit(imageTags);
+    if (imageTags.trim() !== '') {
+      onPropSubmit(imageTags, page);
+      setPage(1);
 
-    setImageTags('');
+      setImageTags('');
+    }
   };
 
   return (
